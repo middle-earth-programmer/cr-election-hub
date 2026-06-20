@@ -8,6 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Smooth transitions for the interactive map paths */
+        .province-path {
+            transition: fill 0.2s ease, stroke-width 0.2s ease;
+        }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased">
 
@@ -31,38 +37,70 @@
             </div>
         </section>
 
-        <!-- Breakdown Section -->
-        <section>
-            <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-300 pb-2 mb-4 gap-4">
-                <h2 class="text-2xl font-bold text-slate-700">Detailed Breakdown</h2>
-                <select id="area-select" class="border border-slate-300 rounded-md p-2 text-slate-700 font-medium bg-white shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="National" selected>National Total</option>
-                    <!-- Provinces injected via JS -->
-                </select>
-            </div>
+        <!-- Main Interactive Dashboard Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- Interactive Chart Container -->
-            <div id="breakdown-view" class="flex bg-white rounded-lg shadow-sm border border-slate-200 p-6 flex-col md:flex-row items-center justify-center gap-8">
-                
-                <!-- Chart Canvas -->
-                <div class="w-full md:w-1/2 max-w-sm">
-                    <canvas id="breakdown-chart"></canvas>
-                </div>
-                
-                <!-- Detail List -->
-                <div class="w-full md:w-1/2 flex flex-col">
-                    <h3 id="breakdown-title" class="text-xl font-bold text-slate-800 mb-4 border-b pb-2"></h3>
-                    <div id="breakdown-details"></div>
-                </div>
+            <!-- LEFT PANEL: Controls & Map (Spans 5 columns on large screens) -->
+            <div class="lg:col-span-5 space-y-4">
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 space-y-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-700 mb-1">Detailed Breakdown</h2>
+                        <p class="text-xs text-slate-400 mb-3">Click a province on the map or use the selector below</p>
+                        
+                        <select id="area-select" class="w-full border border-slate-300 rounded-md p-2 text-slate-700 font-medium bg-white shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="National" selected>🇨🇷 National Total</option>
+                            <!-- Provinces dynamically injected here via JS -->
+                        </select>
+                    </div>
 
+                    <!-- Map Container -->
+                    <div class="bg-slate-50 border border-slate-100 rounded-md p-4 flex items-center justify-center shadow-inner">
+                        <!-- Inline SVG Map of Costa Rica Provinces -->
+                        <svg id="costa-rica-map" viewBox="0 0 400 300" class="w-full h-auto max-w-xs drop-shadow-sm">
+                            <!-- Guanacaste -->
+                            <path id="Guanacaste" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M20,70 L110,40 L130,90 L90,130 L40,110 Z" />
+                            <!-- Alajuela -->
+                            <path id="Alajuela" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M110,40 L190,50 L190,110 L140,130 L130,90 Z" />
+                            <!-- Heredia -->
+                            <path id="Heredia" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M190,50 L220,55 L220,105 L190,110 Z" />
+                            <!-- Limón -->
+                            <path id="Limón" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M220,55 L290,100 L350,170 L290,210 L250,130 L220,105 Z" />
+                            <!-- San José -->
+                            <path id="San José" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M140,130 L190,110 L220,105 L250,130 L240,180 L170,170 Z" />
+                            <!-- Cartago -->
+                            <path id="Cartago" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M220,105 L250,130 L240,160 L215,145 Z" />
+                            <!-- Puntarenas -->
+                            <path id="Puntarenas" class="province-path fill-slate-200 stroke-white stroke-2 cursor-pointer hover:fill-slate-300" d="M90,130 L140,130 L170,170 L240,180 L290,210 L330,250 L290,260 L240,210 L150,150 Z M40,110 L60,130 L30,140 Z" />
+                        </svg>
+                    </div>
+                </div>
             </div>
+
+            <!-- RIGHT PANEL: Charts & Visuals (Spans 7 columns on large screens) -->
+            <div class="lg:col-span-7">
+                <div id="breakdown-view" class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 flex flex-col sm:flex-row items-center justify-center gap-8 h-full">
+                    
+                    <!-- Chart Canvas -->
+                    <div class="w-full sm:w-1/2 max-w-[280px]">
+                        <canvas id="breakdown-chart"></canvas>
+                    </div>
+                    
+                    <!-- Detail List -->
+                    <div class="w-full sm:w-1/2 flex flex-col self-start">
+                        <h3 id="breakdown-title" class="text-xl font-bold text-slate-800 mb-4 border-b pb-2"></h3>
+                        <div id="breakdown-details" class="space-y-1"></div>
+                    </div>
+
+                </div>
+            </div>
+
         </section>
 
     </main>
 
-    <!-- Script to dynamically load JSON data and render the UI -->
+    <!-- Script to dynamically load JSON data and handle dashboard interactivity -->
     <script>
-        // Define party branding
+        // Define party color configurations
         const partyStyles = {
             "Pueblo Soberano": { css: "bg-teal-500 text-teal-50", hex: "#14b8a6" },
             "Liberación Nacional": { css: "bg-green-600 text-green-50", hex: "#16a34a" },
@@ -78,14 +116,15 @@
 
         let pieChart = null;
 
+        // Fetch your external Python-generated JSON data file
         fetch('election_results.json')
             .then(response => {
-                if (!response.ok) throw new Error("HTTP error!");
+                if (!response.ok) throw new Error("HTTP error reading JSON!");
                 return response.json();
             })
             .then(electionData => {
                 
-                // 1. Render National Totals (Top Section)
+                // 1. Render Top National Summary Grid Cards
                 const nationalContainer = document.getElementById('national-container');
                 for (const [party, seats] of Object.entries(electionData.national_total)) {
                     const style = getStyle(party);
@@ -97,7 +136,7 @@
                     `;
                 }
 
-                // 2. Setup the Dropdown Options for Provinces
+                // 2. Setup the Dropdown Select Options
                 const areaSelect = document.getElementById('area-select');
                 const provinceNames = Object.keys(electionData.provinces);
                 
@@ -108,11 +147,12 @@
                     areaSelect.appendChild(option);
                 });
 
-                // 3. Reusable function to render the chart based on selection
+                // 3. Centralized Function to Update Map Highlights, Titles, Data Rows, and Pie Chart
                 function renderChartView(selection) {
                     let dataToDisplay = {};
                     let titleText = "";
 
+                    // A. Determine dataset based on choice
                     if (selection === "National") {
                         dataToDisplay = electionData.national_total;
                         titleText = "National Total (57 Seats)";
@@ -122,14 +162,25 @@
                         titleText = `${selection} (${seats} Seats)`;
                     }
 
+                    // B. Sync Map Colors (Green for active, Light gray for rest)
+                    document.querySelectorAll('.province-path').forEach(path => {
+                        if (path.id === selection) {
+                            path.style.fill = '#22c55e'; // Tailwind green-500 highlight
+                        } else {
+                            path.style.fill = '#e2e8f0'; // Tailwind slate-200 normal unselected
+                        }
+                    });
+
+                    // C. Update Text Header
                     document.getElementById('breakdown-title').textContent = titleText;
 
+                    // D. Parse items for chart arrays & construct data item rows
                     const labels = [];
                     const chartData = [];
                     const backgroundColors = [];
                     const detailsContainer = document.getElementById('breakdown-details');
                     
-                    detailsContainer.innerHTML = ''; // Clear old list
+                    detailsContainer.innerHTML = ''; // Clear prior elements
 
                     for (const [party, seats] of Object.entries(dataToDisplay)) {
                         if (seats > 0) { 
@@ -148,9 +199,8 @@
                         }
                     }
 
-                    // Render or Update Chart.js
+                    // E. Handle Chart.js Instantiation or Update animations
                     const ctx = document.getElementById('breakdown-chart').getContext('2d');
-                    
                     if (pieChart) {
                         pieChart.data.labels = labels;
                         pieChart.data.datasets[0].data = chartData;
@@ -171,29 +221,34 @@
                             options: {
                                 responsive: true,
                                 plugins: {
-                                    legend: {
-                                        position: 'bottom',
-                                        labels: { padding: 20 }
-                                    }
+                                    legend: { display: false } // Hidden because side panel lists them beautifully
                                 }
                             }
                         });
                     }
                 }
 
-                // 4. Listen for Dropdown Changes
+                // 4. Connect Dropdown Interactions
                 areaSelect.addEventListener('change', (e) => {
                     renderChartView(e.target.value);
                 });
 
-                // 5. Initialize the chart with the National view on page load
+                // 5. Connect Interactive SVG Map Click Events
+                document.querySelectorAll('.province-path').forEach(path => {
+                    path.addEventListener('click', () => {
+                        areaSelect.value = path.id; // Switch selection box value
+                        renderChartView(path.id);   // Redraw layout data views
+                    });
+                });
+
+                // 6. Draw National Profile by Default on Initial Application Load
                 renderChartView("National");
             })
             .catch(error => {
-                console.error("Error loading the election data:", error);
+                console.error("Error loading the dashboard payload setup:", error);
                 document.getElementById('national-container').innerHTML = `
                     <div class="col-span-full text-red-600 font-medium p-4 text-center">
-                        Failed to load election data. Ensure election_results.json exists and you are running a local server.
+                        Failed to load data. Ensure 'election_results.json' is present in the local server directory.
                     </div>
                 `;
             });
