@@ -1,0 +1,66 @@
+{
+  "national_total": {
+    "Pueblo Soberano": 31,
+    "Liberación Nacional": 17,
+    "Frente Amplio": 7,
+    "Coalición Agenda Ciudadana": 1,
+    "Unidad Social Cristiana": 1
+  },
+  "provinces": {
+    "San José": {
+      "total_seats_available": 18,
+      "allocation": {
+        "Pueblo Soberano": 8,
+        "Liberación Nacional": 5,
+        "Frente Amplio": 3,
+        "Coalición Agenda Ciudadana": 1,
+        "Unidad Social Cristiana": 1
+      }
+    },
+    "Cartago": {
+      "total_seats_available": 6,
+      "allocation": {
+        "Pueblo Soberano": 3,
+        "Liberación Nacional": 2,
+        "Frente Amplio": 1
+      }
+    },
+    "Heredia": {
+      "total_seats_available": 5,
+      "allocation": {
+        "Pueblo Soberano": 2,
+        "Liberación Nacional": 2,
+        "Frente Amplio": 1
+      }
+    },
+    "Alajuela": {
+      "total_seats_available": 12,
+      "allocation": {
+        "Pueblo Soberano": 7,
+        "Liberación Nacional": 3,
+        "Frente Amplio": 2
+      }
+    },
+    "Guanacaste": {
+      "total_seats_available": 5,
+      "allocation": {
+        "Pueblo Soberano": 3,
+        "Liberación Nacional": 2
+      }
+    },
+    "Puntarenas": {
+      "total_seats_available": 6,
+      "allocation": {
+        "Pueblo Soberano": 4,
+        "Liberación Nacional": 2
+      }
+    },
+    "Limón": {
+      "total_seats_available": 5,
+      "allocation": {
+        "Pueblo Soberano": 4,
+        "Liberación Nacional": 1
+      }
+    }
+  }
+}

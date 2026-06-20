@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Costa Rican Legislative Assembly Allocations</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold tracking-tight">2026 Legislative Assembly</h1>
+            <p class="text-blue-200 mt-1 text-sm">Costa Rica General Election — Seat Allocation Dashboard</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- National Total Section -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-700 border-b border-slate-300 pb-2 mb-4">National Results (57 Seats)</h2>
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                <div id="national-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <!-- National data injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Provinces Grid Section -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-700 border-b border-slate-300 pb-2 mb-4">By Province</h2>
+            <div id="provinces-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Province cards injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script to render the JSON data into the UI -->
+    <script>
+        // 1. Fetch the data from the external JSON file
+        fetch('election_results.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(electionData => {
+                // Cosmetic: add party colors for better readability
+                const partyColors = {
+                    "Pueblo Soberano": "bg-teal-500 text-teal-50",
+                    "Liberación Nacional": "bg-green-600 text-green-50",
+                    "Frente Amplio": "bg-yellow-400 text-yellow-900",
+                    "Unidad Social Cristiana": "bg-blue-600 text-blue-50",
+                    "Nueva República": "bg-sky-500 text-sky-50",
+                    "Coalición Agenda Ciudadana": "bg-red-500 text-red-50",
+                    // Room for other parties (if needed)
+                };
+
+                // 2. Render National Totals
+                const nationalContainer = document.getElementById('national-container');
+                for (const [party, seats] of Object.entries(electionData.national_total)) {
+                    // Look up the color, default to gray if not found
+                    const colorClass = partyColors[party] || "bg-slate-200 text-slate-800";
+                    
+                    nationalContainer.innerHTML += `
+                        <div class="p-4 rounded-md border border-slate-100 flex flex-col items-center justify-center text-center ${colorClass} shadow-sm">
+                            <span class="text-3xl font-black mb-1">${seats}</span>
+                            <span class="text-xs font-semibold uppercase tracking-wide leading-tight">${party}</span>
+                        </div>
+                    `;
+                }
+
+                // 3. Render Province Cards
+                const provincesGrid = document.getElementById('provinces-grid');
+                for (const [province, data] of Object.entries(electionData.provinces)) {
+                    
+                    let partyRows = '';
+                    for (const [party, seats] of Object.entries(data.allocation)) {
+                        if (seats > 0) { 
+                            // Look up the color, default to gray if not found
+                            const colorClass = partyColors[party] || "bg-slate-200 text-slate-800";
+                            
+                            partyRows += `
+                                <div class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
+                                    <span class="text-sm font-medium text-slate-700">${party}</span>
+                                    <span class="${colorClass} text-xs font-bold px-2 py-1 rounded-full shadow-sm">${seats} seats</span>
+                                </div>
+                            `;
+                        }
+                    }
+
+                    provincesGrid.innerHTML += `
+                        <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                            <div class="bg-slate-800 text-white px-4 py-3 flex justify-between items-center">
+                                <h3 class="font-bold">${province}</h3>
+                                <span class="text-xs text-slate-300">${data.total_seats_available} Seats</span>
+                            </div>
+                            <div class="p-4 flex-grow">
+                                ${partyRows}
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error("Error loading the election data:", error);
+                document.getElementById('national-container').innerHTML = `
+                    <div class="col-span-full text-red-600 font-medium p-4 text-center">
+                        Failed to load election data. Please check your console logs or ensure election_results.json exists.
+                    </div>
+                `;
+            });
+    </script>
+</body>
+</html>
