@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Costa Rica Interactive Map</title>
+  <style>
+    /* Centers the map on the page and gives it a clean background */
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f4f4f9;
+      margin: 0;
+    }
+
+    /* Creates a white card container for the map */
+    .map-container {
+      width: 100%;
+      max-width: 800px;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* SVG Map Styling */
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    /* Default style for the provinces */
+    svg path {
+      fill: #4b8b62; 
+      stroke: #ffffff; 
+      stroke-width: 2;
+      transition: fill 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    /* Changes color when you mouse over a province */
+    svg path:hover {
+      fill: #2c593b; 
+    }
+  </style>
+</head>
+<body>
+
+  <div class="map-container">
+    <h2>Interactive Map of Costa Rica</h2>
+    
+    <!-- This is where your new map goes -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800">
+      <!-- I left the 'd' paths blank here to keep it readable. 
+           Paste your actual 'd="..."' strings into these paths! -->
+      <path id="CRA" title="Alajuela" d="..." />
+      <path id="CRG" title="Guanacaste" d="..." />
+      <path id="CRL" title="Limón" d="..." />
+      <path id="CRP" title="Puntarenas" d="..." />
+      <path id="CRH" title="Heredia" d="..." />
+      <path id="CRSJ" title="San José" d="..." />
+    </svg>
+  </div>
+
+</body>
+</html>
