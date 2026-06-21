@@ -1,188 +1,14 @@
 import json
+import os
 
 # Costa Rican General Election data for the Legislative Assembly by province.
 # Source: Tribunal Supremo de Elecciones (TSE)
-election_data: dict[str, dict] = {
-    "San José": {
-        "seats": 18,
-        "results": {
-            "Pueblo Soberano": 314_307,  # right/populist
-            "Liberación Nacional": 203_357,  # center-left
-            "Frente Amplio": 126_419,  # left
-            "Coalición Agenda Ciudadana": 40_161,  # center-left
-            "Unidad Social Cristiana": 38_313,  # center-right
-            "Nueva República": 19_922,  # right
-            "Avanza": 16_112,
-            "Unidos Podemos": 7_701,
-            "Compatriotas": 7_283,
-            "Liberal Progresista": 5_706,  # right
-            "Progreso Social Democratico": 5_267,  # left
-            "Nueva Generación": 3_637,  # right
-            "Integracion Nacional": 2_577,
-            "Justicia Social Costarricense": 2_371,  # left
-            "Centro Democrático y Social": 2_145,
-            "De la Clase Trabajadora": 1_817,  # very left
-            "Esperanza y Libertad": 1_375,
-            "Esperanza Nacional": 1_306,
-            "Unión Costarricense Democrática": 1_290,
-            "Aquí Costa Rica Manda": 1_037,  # right
-            "Anticorrupcion Costarricense": 939,
-            "Alianza Costa Rica Primero": 799
-        }
-    },
-    "Cartago": {
-        "seats": 6,
-        "results": {
-            "Pueblo Soberano": 104_267,
-            "Liberación Nacional": 84_805,
-            "Frente Amplio": 40_718,
-            "Coalición Agenda Ciudadana": 16_947,
-            "Unidad Social Cristiana": 12_383,
-            "Actuemos Ya": 11_577,
-            "Unidos Podemos": 6_390,
-            "Avanza": 5_160,
-            "Nueva República": 4_473,
-            "Nueva Generación": 3_051,
-            "Progreso Social Democratico": 2_966,
-            "Liberal Progresista": 2_346,
-            "Justicia Social Costarricense": 1_165,
-            "Alianza Costa Rica Primero": 1_089,
-            "De la Clase Trabajadora": 986,
-            "Integracion Nacional": 937,
-            "Centro Democrático y Social": 806,
-            "Esperanza y Libertad": 701,
-            "Esperanza Nacional": 681,
-            "Unión Costarricense Democrática": 499,
-            "Aquí Costa Rica Manda": 429
-        }
-    },
-    "Heredia": {
-        "seats": 5,
-        "results": {
-            "Pueblo Soberano": 110_324,
-            "Liberación Nacional": 71_733,
-            "Frente Amplio": 43_912,
-            "Coalición Agenda Ciudadana": 13_153,
-            "Unidad Social Cristiana": 9_786,
-            "Nueva República": 5_947,
-            "Avanza": 5_176,
-            "Unidos Podemos": 2_491,
-            "Liberal Progresista": 2_299,
-            "Progreso Social Democratico": 1_168,
-            "Integracion Nacional": 996,
-            "Alianza Costa Rica Primero": 959,
-            "Centro Democrático y Social": 810,
-            "Nueva Generación": 769,
-            "Justicia Social Costarricense": 674,
-            "De la Clase Trabajadora": 570,
-            "Esperanza y Libertad": 554,
-            "Esperanza Nacional": 418,
-            "Unión Costarricense Democrática": 299,
-            "Aquí Costa Rica Manda": 250
-        }
-    },
-    "Alajuela": {
-        "seats": 12,
-        "results": {
-            "Pueblo Soberano": 254_208,
-            "Liberación Nacional": 110_207,
-            "Frente Amplio": 52_399,
-            "Unidad Social Cristiana": 16_628,
-            "Coalición Agenda Ciudadana": 12_888,
-            "Nueva República": 11_859,
-            "Avanza": 7_941,
-            "Unidos Podemos": 3_696,
-            "Progreso Social Democratico": 3_508,
-            "Liberal Progresista": 2_899,
-            "Esperanza Nacional": 2_626,
-            "Nueva Generación": 2_174,
-            "Integracion Nacional": 1_563,
-            "Centro Democrático y Social": 1_483,
-            "Justicia Social Costarricense": 1_156,
-            "De la Clase Trabajadora": 924,
-            "Unión Costarricense Democrática": 832,
-            "Esperanza y Libertad": 781,
-            "Aquí Costa Rica Manda": 717,
-            "Alianza Costa Rica Primero": 625
-        }
-    },
-    "Guanacaste": {
-        "seats": 5,
-        "results": {
-            "Pueblo Soberano": 83_052,
-            "Liberación Nacional": 30_168,
-            "Frente Amplio": 9_430,
-            "Unidad Social Cristiana": 9_135,
-            "Coalición Agenda Ciudadana": 5_594,
-            "Unión Guanacasteca": 5_147,
-            "Nueva Generación": 5_050,
-            "Nueva República": 4_050,
-            "Avanza": 3_403,
-            "Unidos Podemos": 1_980,
-            "Progreso Social Democratico": 1_667,
-            "Liberal Progresista": 1_153,
-            "Alianza Costa Rica Primero": 1_015,
-            "Integracion Nacional": 557,
-            "Justicia Social Costarricense": 536,
-            "Centro Democrático y Social": 513,
-            "Aquí Costa Rica Manda": 486,
-            "Unión Costarricense Democrática": 444,
-            "De la Clase Trabajadora": 329,
-            "Esperanza y Libertad": 193,
-            "Esperanza Nacional": 190
-        }
-    },
-    "Puntarenas": {
-        "seats": 6,
-        "results": {
-            "Pueblo Soberano": 114_410,
-            "Liberación Nacional": 30_907,
-            "Frente Amplio": 12_061,
-            "Unidad Social Cristiana": 10_645,
-            "Nueva República": 7_163,
-            "Coalición Agenda Ciudadana": 3_809,
-            "Progreso Social Democratico": 1_764,
-            "Avanza": 1_725,
-            "Unidos Podemos": 1_701,
-            "Liberal Progresista": 1_661,
-            "Alianza Costa Rica Primero": 1_655,
-            "Centro Democrático y Social": 1_319,
-            "Nueva Generación": 1_164,
-            "Integracion Nacional": 730,
-            "Espeanza y Libertad": 669,
-            "Unión Costarricense Democrática": 642,
-            "Justicia Social Costarricense": 561,
-            "Aquí Costa Rica Manda": 477,
-            "De la Clase Trabajadora": 472,
-            "Esperanza Nacional": 464
-        }
-    },
-    "Limón": {
-        "seats": 5,
-        "results": {
-            "Pueblo Soberano": 95_109,
-            "Liberación Nacional": 24_443,
-            "Unidad Social Cristiana": 12_548,
-            "Frente Amplio": 8_143,
-            "Nueva República": 5_370,
-            "Unidos Podemos": 4_531,
-            "Coalición Agenda Ciudadana": 3_802,
-            "Justicia Social Costarricense": 2_340,
-            "Progreso Social Democratico": 1_924,
-            "Avanza": 1_385,
-            "Alianza Costa Rica Primero": 1_172,
-            "Liberal Progresista": 1_099,
-            "Nueva Generación": 1_081,
-            "Centro Democrático y Social": 753,
-            "Esperanza y Libertad": 718,
-            "De la Clase Trabajadora": 465,
-            "Integracion Nacional": 445,
-            "Unión Costarricense Democrática": 443,
-            "Aquí Costa Rica Manda": 432,
-            "Esperanza Nacional": 376
-        }
-    },
-}
+def load_election_raw_data(filepath: str = "election_raw_data.json") -> dict:
+    """Loads and parses raw electoral data from an external JSON file."""
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Electoral raw data file not found: {filepath}")
+    with open(filepath, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
 def filter_votes(results: dict[str, int], threshold: int|float):
     """Filters results by subquotient threshold as defined by Costa Rican law."""
@@ -340,27 +166,24 @@ def generate_web_payload(election_data: dict[str, dict]):
 
     return payload
 
-
+# The main program for raw election data processing
 if __name__ == "__main__":
-    web_data = generate_web_payload(election_data)
-    
-    # Save directly to JSON for immediate web ingestion
-    output_filename = 'election_results.json'
-    with open(output_filename, 'w', encoding='utf-8') as f:
-        json.dump(web_data, f, ensure_ascii=False, indent=2)
+    try:
+        raw_data_filename = 'election_raw_data.json'
+        election_data = load_election_raw_data(raw_data_filename)
+        web_data = generate_web_payload(election_data)
         
-    print(f"\n[Success] Calculated seat allotment & compiled vote ratios successfully!")
-    print(f"[Success] Generated dashboard database: '{output_filename}'\n")
+        # Save directly to JSON for immediate web ingestion
+        output_filename = 'election_results.json'
+        with open(output_filename, 'w', encoding='utf-8') as f:
+            json.dump(web_data, f, ensure_ascii=False, indent=2)
+            
+        print(f"\n[Success] Calculated seat allotment & compiled vote ratios successfully!")
+        print(f"[Success] Loaded raw input: '{raw_data_filename}' -> Exported compiled profile: '{output_filename}'\n")
 
-    # Output Console summary of National Seats for reference
-    print("--- Calculated National Seats Summary ---")
-    for party, seats in sorted(web_data["national_total"]["seats"].items(), key=lambda x: x[1], reverse=True):
-        print(f" * {party}: {seats} seats")
-
-
-""" Summary of Changes:
-1. **Dynamic Identification of Major Parties**: The script automatically detects which parties won $\ge 1$ seat nationally and preserves their individual categories.
-2. **Aggregating Smaller Parties into `"Other"`**: All minor parties that did not secure seats have their popular vote shares and seats automatically calculated, summed up, and grouped under the `"Other"` label.
-3. **Structured JSON Output**: The payload structure matches both the `seats` and `popular_vote` requirements used directly by the map frontend (`index.html`).
-4. **Automated Writing File**: It automatically outputs `election_results.json` directly to your folder upon executing the Python script.
-"""
+        # Output Console summary of National Seats for reference
+        print("--- Calculated National Seats Summary ---")
+        for party, seats in sorted(web_data["national_total"]["seats"].items(), key=lambda x: x[1], reverse=True):
+            print(f" * {party}: {seats} seats")
+    except Exception as e:
+        print(f"\n[Error] Failed to execute seat allotment calculations: {e}\n")
