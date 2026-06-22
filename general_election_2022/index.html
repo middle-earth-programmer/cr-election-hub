@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2022 Costa Rican Legislative Assembly Allocations & Popular Vote</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Smooth transitions for the interactive map paths */
+        .province-path {
+            transition: fill 0.2s ease, stroke-width 0.2s ease;
+            cursor: pointer;
+        }
+        /* Hover effect slightly darkens the province if it isn't the active one */
+        .province-path:hover:not(.active-province) {
+            fill: #cbd5e1 !important; /* Tailwind slate-300 */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold tracking-tight">2022 Legislative Assembly</h1>
+            <p class="text-blue-200 mt-1 text-sm">Costa Rica General Election — Seat Allocation & Popular Vote Dashboard</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- National Total Section -->
+        <!-- STREAMING_CHUNK: Rendering the National summary cards -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-700 border-b border-slate-300 pb-2 mb-4">National Results (57 Seats Total)</h2>
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                <div id="national-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                    <!-- National data injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Interactive Dashboard Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- LEFT PANEL: Controls & Map -->
+            <!-- STREAMING_CHUNK: Creating the interactive filters and map container -->
+            <div class="lg:col-span-5 space-y-4">
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 space-y-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-700 mb-1">Detailed Breakdown</h2>
+                        <p class="text-xs text-slate-400 mb-3">Click a province on the map or use the filters below</p>
+                        
+                        <div class="space-y-3">
+                            <select id="area-select" class="w-full border border-slate-300 rounded-md p-2 text-slate-700 font-medium bg-white shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="National" selected>🇨🇷 National Total</option>
+                                <!-- Provinces dynamically injected here via JS -->
+                            </select>
+
+                            <!-- Metric Toggle Switch -->
+                            <div class="flex rounded-md shadow-sm">
+                                <button id="tab-seats" class="w-1/2 py-2 text-xs font-semibold rounded-l-md border border-slate-300 bg-blue-50 text-blue-700 focus:outline-none transition-colors">
+                                    Seat Allocation
+                                </button>
+                                <button id="tab-vote" class="w-1/2 py-2 text-xs font-semibold rounded-r-md border-t border-b border-r border-slate-300 bg-white text-slate-600 hover:text-slate-800 hover:bg-slate-50 focus:outline-none transition-colors">
+                                    Popular Vote %
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Container -->
+                    <div id="map-container" class="bg-slate-50 border border-slate-100 rounded-md p-4 flex items-center justify-center shadow-inner relative overflow-hidden">
+                        <p class="text-sm text-slate-400 animate-pulse">Loading Map...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Charts & Visuals -->
+            <!-- STREAMING_CHUNK: Styling the visualization panel -->
+            <div class="lg:col-span-7">
+                <div id="breakdown-view" class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 flex flex-col sm:flex-row items-center justify-center gap-8 h-full">
+                    
+                    <!-- Chart Canvas -->
+                    <div class="w-full sm:w-1/2 max-w-[280px]">
+                        <canvas id="breakdown-chart"></canvas>
+                    </div>
+                    
+                    <!-- Detail List -->
+                    <div class="w-full sm:w-1/2 flex flex-col self-start">
+                        <h3 id="breakdown-title" class="text-xl font-bold text-slate-800 mb-4 border-b pb-2"></h3>
+                        <div id="breakdown-details" class="space-y-1"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Script to dynamically load JSON data and handle dashboard interactivity -->
+    <!-- STREAMING_CHUNK: Initializing state and dashboard functions -->
+    <script>
+        // Define party color configurations
+        const partyStyles = {
+            "Liberación Nacional": { css: "bg-green-600 text-green-50", hex: "#16a34a" },
+            "Frente Amplio": { css: "bg-yellow-400 text-yellow-900", hex: "#facc15" },
+            "Unidad Social Cristiana": { css: "bg-blue-600 text-blue-50", hex: "#2563eb" },
+            "Nueva República": { css: "bg-sky-500 text-sky-50", hex: "#0ea5e9" },
+            "Progreso Social Democrático": { css: "bg-emerald-600 text-emerald-50", hex: "#059669" },
+            "Liberal Progresista": { css: "bg-orange-500 text-orange-50", hex: "#f97316" },
+            "Other": { css: "bg-slate-400 text-slate-50", hex: "#94a3b8" }
+        };
+
+        function getStyle(party) {
+            return partyStyles[party] || { css: "bg-slate-200 text-slate-800", hex: "#94a3b8" };
+        }
+
+        let pieChart = null;
+        let activeMetric = 'seats'; // can be 'seats' or 'popular_vote'
+        let currentSelection = 'National';
+        let electionData = null;
+
+        // Wrap everything in an async function to make loading external files cleaner
+        async function initializeDashboard() {
+            try {
+                // 1. Fetch the external SVG map and inject it into the page
+                const svgResponse = await fetch('costa_rica.svg');
+                if (!svgResponse.ok) throw new Error("Could not load SVG map file!");
+                const svgContent = await svgResponse.text();
+                document.getElementById('map-container').innerHTML = svgContent;
+
+                // 2. Fetch the external Python/JSON data file
+                const dataResponse = await fetch('election_results_2022.json');
+                if (!dataResponse.ok) throw new Error("Could not load JSON data file!");
+                electionData = await dataResponse.json();
+
+                // 3. Render Top National Summary Grid Cards (Seats and Popular Vote side-by-side inside cards)
+                const nationalContainer = document.getElementById('national-container');
+                const natSeats = electionData.national_total.seats;
+                const natVotes = electionData.national_total.popular_vote;
+
+                // Sort national parties by seats won
+                const sortedNationalParties = Object.keys(natSeats).sort((a,b) => natSeats[b] - natSeats[a]);
+
+                sortedNationalParties.forEach(party => {
+                    if (natSeats[party] > 0 || natVotes[party] > 0) {
+                        // Change "seat" to "seats" only if party has multiple seats.
+                        if (natSeats[party] == 1) {
+                            numSuffix = "";
+                        } else {
+                            numSuffix = "s";
+                        }
+
+                        const style = getStyle(party);
+                        nationalContainer.innerHTML += `
+                            <div class="${style.css} p-3 rounded-md border border-slate-100 flex flex-col items-center justify-center text-center shadow-sm">
+                                <span class="text-2xl font-black mb-0.5">${natSeats[party] || 0} <span class="text-xs font-normal">seat${numSuffix}</span></span>
+                                <span class="text-xs font-bold leading-tight uppercase tracking-wide truncate max-w-full" title="${party}">${party}</span>
+                                <span class="text-[10px] opacity-90 mt-1">${natVotes[party] ? natVotes[party].toFixed(1) : '0.0'}% vote</span>
+                            </div>
+                        `;
+                    }
+                });
+
+                // 4. Setup the Dropdown Select Options
+                const areaSelect = document.getElementById('area-select');
+                const provinceNames = Object.keys(electionData.provinces);
+                
+                provinceNames.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province;
+                    option.textContent = province;
+                    areaSelect.appendChild(option);
+                });
+
+                // 5. Centralized Function to Update Map Highlights, Titles, Data Rows, and Pie Chart
+                // STREAMING_CHUNK: Defining the rendering function for charts and details
+                function renderChartView(selection) {
+                    currentSelection = selection;
+                    let dataToDisplay = {};
+                    let titleText = "";
+
+                    // A. Determine dataset based on choice
+                    if (selection === "National") {
+                        dataToDisplay = electionData.national_total[activeMetric];
+                        titleText = activeMetric === 'seats' ? "National Allocation (57 Seats)" : "National Popular Vote %";
+                    } else {
+                        dataToDisplay = electionData.provinces[selection][activeMetric];
+                        const totalProvSeats = electionData.provinces[selection].total_seats_available;
+                        titleText = activeMetric === 'seats' 
+                            ? `${selection} Seat Allocation (${totalProvSeats} Seats)` 
+                            : `${selection} Popular Vote %`;
+                    }
+
+                    // B. Sync Map Colors (Golden/Amber for National, Green for Active, Light gray for rest)
+                    document.querySelectorAll('.province-path').forEach(path => {
+                        path.classList.remove('active-province');
+                        
+                        if (selection === "National") {
+                            // Turn the whole country golden
+                            path.style.fill = 'oklch(87.9% 0.169 91.605)'; // Tailwind amber-300
+                        } else if (path.id === selection) {
+                            // Turn only the selected province green
+                            path.style.fill = '#22c55e'; // Tailwind green-500 highlight
+                            path.classList.add('active-province'); // Prevent hover graying out active item
+                            path.parentNode.appendChild(path); 
+                        } else {
+                            // Dim unselected provinces
+                            path.style.fill = '#e2e8f0'; // Tailwind slate-200 normal unselected
+                        }
+                    });
+
+                    // C. Update Text Header
+                    document.getElementById('breakdown-title').textContent = titleText;
+
+                    // D. Parse items for chart arrays & construct data item rows
+                    const labels = [];
+                    const chartData = [];
+                    const backgroundColors = [];
+                    const detailsContainer = document.getElementById('breakdown-details');
+                    
+                    detailsContainer.innerHTML = ''; // Clear prior elements
+
+                    // Sort display items descending by metric value
+                    const sortedParties = Object.entries(dataToDisplay)
+                        .filter(([_, value]) => value > 0)
+                        .sort((a, b) => b[1] - a[1]);
+
+                    for (const [party, val] of sortedParties) {
+                        const style = getStyle(party);
+
+                        // Handles singular/plural grammar directly inline
+                        const displayVal = activeMetric === 'seats' 
+                            ? `${val} ${val === 1 ? 'seat' : 'seats'}` 
+                            : `${val.toFixed(1)}%`;
+
+                        labels.push(party);
+                        chartData.push(val);
+                        backgroundColors.push(style.hex);
+
+                        detailsContainer.innerHTML += `
+                            <div class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
+                                <span class="text-sm font-medium text-slate-700 truncate max-w-[70%]" title="${party}">${party}</span>
+                                <span class="${style.css} text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">${displayVal}</span>
+                            </div>
+                        `;
+                    }
+
+                    // E. Handle Chart.js Instantiation or Update animations
+                    const ctx = document.getElementById('breakdown-chart').getContext('2d');
+                    if (pieChart) {
+                        pieChart.data.labels = labels;
+                        pieChart.data.datasets[0].data = chartData;
+                        pieChart.data.datasets[0].backgroundColor = backgroundColors;
+                        pieChart.update();
+                    } else {
+                        pieChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: chartData,
+                                    backgroundColor: backgroundColors,
+                                    borderWidth: 1.5,
+                                    borderColor: '#ffffff'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { display: false }
+                                }
+                            }
+                        });
+                    }
+                }
+
+                // 6. Tab Switching Logic
+                // STREAMING_CHUNK: Implementing switcher tabs event handlers
+                const tabSeats = document.getElementById('tab-seats');
+                const tabVote = document.getElementById('tab-vote');
+
+                tabSeats.addEventListener('click', () => {
+                    activeMetric = 'seats';
+                    tabSeats.className = "w-1/2 py-2 text-xs font-semibold rounded-l-md border border-slate-300 bg-blue-50 text-blue-700 focus:outline-none transition-colors";
+                    tabVote.className = "w-1/2 py-2 text-xs font-semibold rounded-r-md border-t border-b border-r border-slate-300 bg-white text-slate-600 hover:text-slate-800 hover:bg-slate-50 focus:outline-none transition-colors";
+                    renderChartView(currentSelection);
+                });
+
+                tabVote.addEventListener('click', () => {
+                    activeMetric = 'popular_vote';
+                    tabVote.className = "w-1/2 py-2 text-xs font-semibold rounded-r-md border border-blue-500 bg-blue-50 text-blue-700 focus:outline-none transition-colors";
+                    tabSeats.className = "w-1/2 py-2 text-xs font-semibold rounded-l-md border border-slate-300 bg-white text-slate-600 hover:text-slate-800 hover:bg-slate-50 focus:outline-none transition-colors";
+                    renderChartView(currentSelection);
+                });
+
+                // 7. Connect Dropdown Interactions
+                areaSelect.addEventListener('change', (e) => {
+                    renderChartView(e.target.value);
+                });
+
+                // 8. Connect Interactive SVG Map Click Events
+                document.querySelectorAll('.province-path').forEach(path => {
+                    path.addEventListener('click', () => {
+                        areaSelect.value = path.id; // Switch selection box value
+                        renderChartView(path.id);   // Redraw layout data views
+                    });
+                });
+
+                // 9. Draw National Profile by Default on Initial Application Load
+                renderChartView("National");
+
+            } catch (error) {
+                console.error("Dashboard initialization error:", error);
+                document.getElementById('map-container').innerHTML = `
+                    <div class="text-red-600 font-medium p-4 text-center text-sm">
+                        Failed to load data. Ensure 'election_results_2022.json' and 'costa_rica.svg' are present in the directory.
+                    </div>
+                `;
+            }
+        }
+
+        // Boot up the dashboard
+        initializeDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+{
+  "national_total": {
+    "seats": {
+      "Liberación Nacional": 17,
+      "Unidad Social Cristiana": 10,
+      "Progreso Social Democrático": 11,
+      "Nueva República": 8,
+      "Liberal Progresista": 6,
+      "Frente Amplio": 5
+    },
+    "popular_vote": {
+      "Liberación Nacional": 24.82,
+      "Unidad Social Cristiana": 11.34,
+      "Progreso Social Democrático": 14.97,
+      "Nueva República": 10.06,
+      "Frente Amplio": 8.3,
+      "Liberal Progresista": 9.05,
+      "Other": 21.46
+    }
+  },
+  "provinces": {
+    "Guanacaste": {
+      "total_seats_available": 5,
+      "seats": {
+        "Liberación Nacional": 2,
+        "Unidad Social Cristiana": 2,
+        "Progreso Social Democrático": 1
+      },
+      "popular_vote": {
+        "Liberación Nacional": 26.14,
+        "Unidad Social Cristiana": 16.79,
+        "Progreso Social Democrático": 12.44,
+        "Nueva República": 9.58,
+        "Frente Amplio": 4.17,
+        "Liberal Progresista": 3.42,
+        "Other": 27.46
+      }
+    },
+    "Puntarenas": {
+      "total_seats_available": 6,
+      "seats": {
+        "Liberación Nacional": 2,
+        "Nueva República": 2,
+        "Unidad Social Cristiana": 1,
+        "Progreso Social Democrático": 1
+      },
+      "popular_vote": {
+        "Liberación Nacional": 23.08,
+        "Nueva República": 16.88,
+        "Unidad Social Cristiana": 13.59,
+        "Progreso Social Democrático": 11.48,
+        "Frente Amplio": 5.35,
+        "Liberal Progresista": 2.61,
+        "Other": 27.01
+      }
+    },
+    "Alajuela": {
+      "total_seats_available": 12,
+      "seats": {
+        "Liberación Nacional": 3,
+        "Progreso Social Democrático": 3,
+        "Unidad Social Cristiana": 2,
+        "Nueva República": 2,
+        "Liberal Progresista": 1,
+        "Frente Amplio": 1
+      },
+      "popular_vote": {
+        "Liberación Nacional": 26.11,
+        "Progreso Social Democrático": 18.66,
+        "Unidad Social Cristiana": 11.43,
+        "Nueva República": 10.8,
+        "Liberal Progresista": 8.74,
+        "Frente Amplio": 6.83,
+        "Other": 17.44
+      }
+    },
+    "Heredia": {
+      "total_seats_available": 5,
+      "seats": {
+        "Liberación Nacional": 1,
+        "Progreso Social Democrático": 1,
+        "Liberal Progresista": 1,
+        "Unidad Social Cristiana": 1,
+        "Frente Amplio": 1
+      },
+      "popular_vote": {
+        "Liberación Nacional": 25.92,
+        "Progreso Social Democrático": 13.91,
+        "Liberal Progresista": 12.76,
+        "Unidad Social Cristiana": 10.98,
+        "Frente Amplio": 10.57,
+        "Nueva República": 8.37,
+        "Other": 17.49
+      }
+    },
+    "Cartago": {
+      "total_seats_available": 6,
+      "seats": {
+        "Liberación Nacional": 2,
+        "Unidad Social Cristiana": 1,
+        "Progreso Social Democrático": 1,
+        "Frente Amplio": 1,
+        "Liberal Progresista": 1
+      },
+      "popular_vote": {
+        "Liberación Nacional": 26.4,
+        "Unidad Social Cristiana": 12.17,
+        "Progreso Social Democrático": 10.58,
+        "Frente Amplio": 9.2,
+        "Liberal Progresista": 8.94,
+        "Nueva República": 5.73,
+        "Other": 26.97
+      }
+    },
+    "Limón": {
+      "total_seats_available": 5,
+      "seats": {
+        "Liberación Nacional": 2,
+        "Nueva República": 2,
+        "Unidad Social Cristiana": 1
+      },
+      "popular_vote": {
+        "Liberación Nacional": 20.22,
+        "Nueva República": 15.75,
+        "Unidad Social Cristiana": 13.07,
+        "Progreso Social Democrático": 8.23,
+        "Frente Amplio": 5.07,
+        "Liberal Progresista": 2.3,
+        "Other": 35.36
+      }
+    },
+    "San José": {
+      "total_seats_available": 18,
+      "seats": {
+        "Liberación Nacional": 5,
+        "Progreso Social Democrático": 4,
+        "Liberal Progresista": 3,
+        "Frente Amplio": 2,
+        "Unidad Social Cristiana": 2,
+        "Nueva República": 2
+      },
+      "popular_vote": {
+        "Liberación Nacional": 24.24,
+        "Progreso Social Democrático": 17.01,
+        "Liberal Progresista": 11.74,
+        "Frente Amplio": 10.08,
+        "Unidad Social Cristiana": 9.45,
+        "Nueva República": 9.1,
+        "Other": 18.37
+      }
+    }
+  }
+}

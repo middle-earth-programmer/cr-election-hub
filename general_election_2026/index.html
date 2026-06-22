@@ -111,7 +111,6 @@
             "Liberación Nacional": { css: "bg-green-600 text-green-50", hex: "#16a34a" },
             "Frente Amplio": { css: "bg-yellow-400 text-yellow-900", hex: "#facc15" },
             "Unidad Social Cristiana": { css: "bg-blue-600 text-blue-50", hex: "#2563eb" },
-            "Nueva República": { css: "bg-sky-500 text-sky-50", hex: "#0ea5e9" },
             "Coalición Agenda Ciudadana": { css: "bg-red-500 text-red-50", hex: "#ef4444" },
             "Other": { css: "bg-slate-400 text-slate-50", hex: "#94a3b8" }
         };
@@ -135,7 +134,7 @@
                 document.getElementById('map-container').innerHTML = svgContent;
 
                 // 2. Fetch the external Python/JSON data file
-                const dataResponse = await fetch('election_results.json');
+                const dataResponse = await fetch('election_results_2026.json');
                 if (!dataResponse.ok) throw new Error("Could not load JSON data file!");
                 electionData = await dataResponse.json();
 
@@ -319,7 +318,7 @@
                 console.error("Dashboard initialization error:", error);
                 document.getElementById('map-container').innerHTML = `
                     <div class="text-red-600 font-medium p-4 text-center text-sm">
-                        Failed to load data. Ensure 'election_results.json' and 'costa_rica.svg' are present in the directory.
+                        Failed to load data. Ensure 'election_results_2026.json' and 'costa_rica.svg' are present in the directory.
                     </div>
                 `;
             }

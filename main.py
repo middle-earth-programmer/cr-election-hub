@@ -169,12 +169,12 @@ def generate_web_payload(election_data: dict[str, dict]):
 # The main program for raw election data processing
 if __name__ == "__main__":
     try:
-        raw_data_filename = 'election_raw_data.json'
+        raw_data_filename = 'election_raw_data_2022.json'
         election_data = load_election_raw_data(raw_data_filename)
         web_data = generate_web_payload(election_data)
         
         # Save directly to JSON for immediate web ingestion
-        output_filename = 'election_results.json'
+        output_filename = 'election_results_2022.json'
         with open(output_filename, 'w', encoding='utf-8') as f:
             json.dump(web_data, f, ensure_ascii=False, indent=2)
             
