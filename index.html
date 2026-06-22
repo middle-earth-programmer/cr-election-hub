@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costa Rica Legislative Elections Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.1) 0%, transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.05) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased hero-gradient min-h-screen flex flex-col justify-between">
+
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">🇨🇷</span>
+                    <span class="font-bold text-lg text-slate-800 tracking-tight">CR Elections Hub</span>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://middle-earth-programmer.github.io/2022-general-election/" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">2022 Results</a>
+                    <a href="https://middle-earth-programmer.github.io/2026-general-election/" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">2026 Current Distribution</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-5xl mx-auto px-4 pt-16 pb-12 text-center space-y-6">
+        <span class="bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full border border-blue-200 inline-block">
+            Electoral Analysis Platform
+        </span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+            Costa Rican Legislative <br class="hidden sm:inline">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">Election Dashboards</span>
+        </h1>
+        <p class="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Explore and analyze the multi-party distribution of the 57 Assembly seats across Costa Rica's seven provinces, calculated through the constitutional double-quota formula.
+        </p>
+    </header>
+
+    <!-- Main Dashboard Gateways -->
+    <main class="max-w-6xl mx-auto px-4 w-full space-y-16 flex-grow">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- 2022 Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm hover:shadow-xl hover:border-blue-400 transition-all duration-300 flex flex-col justify-between group">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div class="bg-slate-100 group-hover:bg-blue-50 text-slate-700 group-hover:text-blue-600 p-3 rounded-xl transition-colors">
+                            <i class="fa-solid fa-box-archive text-2xl"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Historical Data</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">2022 Legislative Results</h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Examine the definitive results of the 2022 election. See how the emerging PPSD claimed seats and how traditional forces like PLN and PUSC structured the Assembly.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-600">
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Official TSE consolidated data</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Full 7-province structural map</li>
+                    </ul>
+                </div>
+                <div class="pt-8">
+                    <a href="https://middle-earth-programmer.github.io/2022-general-election/" class="w-full text-center block bg-slate-900 group-hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-md">
+                        Explore 2022 Dashboard <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 2026 Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm hover:shadow-xl hover:border-teal-400 transition-all duration-300 flex flex-col justify-between group">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div class="bg-slate-100 group-hover:bg-teal-50 text-slate-700 group-hover:text-teal-600 p-3 rounded-xl transition-colors">
+                            <i class="fa-solid fa-chart-line text-2xl"></i>
+                        </div>
+                        <span class="text-xs font-bold text-teal-600 uppercase tracking-wider bg-teal-50 px-2 py-0.5 rounded border border-teal-100">Current Distribution</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">2026 Current Distribution</h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Track active seat allocations, party shifts, and popular vote distributions for the ongoing legislative period.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-600">
+                        <li><i class="fa-solid fa-check text-teal-500 mr-2"></i>Interactive seat and vote percentages</li>
+                        <li><i class="fa-solid fa-check text-teal-500 mr-2"></i>Dynamic breakdown tool updates</li>
+                    </ul>
+                </div>
+                <div class="pt-8">
+                    <a href="https://middle-earth-programmer.github.io/2026-general-election/" class="w-full text-center block bg-slate-900 group-hover:bg-teal-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-md">
+                        Explore 2026 Dashboard <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Educational System Guide -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7 space-y-6">
+                <h3 class="text-2xl font-bold text-slate-800">Understanding the Electoral Formula</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Costa Rica uses a unique, proportional representation system based on the <strong>Hare Quota</strong> system with a secondary threshold requirement. Seats are allocated across provinces based on three primary terms:
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5">1</div>
+                        <div>
+                            <h4 class="font-semibold text-sm text-slate-800">The Quotient (Cociente)</h4>
+                            <p class="text-xs text-slate-500">The total valid provincial votes divided by the number of seats available in that province.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5">2</div>
+                        <div>
+                            <h4 class="font-semibold text-sm text-slate-800">The Subquotient (Subcociente)</h4>
+                            <p class="text-xs text-slate-500">Half of the Quotient. Parties must receive at least this many votes in a province to even qualify for the seat allocation process.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5">3</div>
+                        <div>
+                            <h4 class="font-semibold text-sm text-slate-800">Greatest Remainder (Residuo Mayor)</h4>
+                            <p class="text-xs text-slate-500">Leftover seats that are not distributed cleanly by the full Quotient are given sequentially to the qualifying parties with the largest leftover vote remainders.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive System Calculator Simulator inside card -->
+            <div class="lg:col-span-5 bg-slate-50 border border-slate-200 p-6 rounded-xl space-y-4">
+                <h4 class="font-bold text-slate-700 text-sm border-b pb-2"><i class="fa-solid fa-calculator mr-2 text-blue-500"></i>Live Formula Simulator</h4>
+                <p class="text-[11px] text-slate-400">Input hypothetical numbers to see how seats get divided dynamically:</p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Total Provincial Seats Available</label>
+                        <input id="sim-seats" type="number" value="4" min="1" max="20" class="w-full text-xs p-2 border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 bg-white">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Party A Votes</label>
+                            <input id="sim-party-a" type="number" value="50000" class="w-full text-xs p-2 border border-slate-300 rounded bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Party B Votes</label>
+                            <input id="sim-party-b" type="number" value="30000" class="w-full text-xs p-2 border border-slate-300 rounded bg-white">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Party C Votes</label>
+                            <input id="sim-party-c" type="number" value="12000" class="w-full text-xs p-2 border border-slate-300 rounded bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Party D Votes</label>
+                            <input id="sim-party-d" type="number" value="5000" class="w-full text-xs p-2 border border-slate-300 rounded bg-white">
+                        </div>
+                    </div>
+
+                    <button onclick="calculateSimulatedSeats()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded text-xs transition-colors">
+                        Calculate Distribution
+                    </button>
+                </div>
+
+                <!-- Simulation Output -->
+                <div id="sim-output" class="bg-white border border-slate-100 p-4 rounded text-xs space-y-2 hidden">
+                    <!-- Dynamic details injected here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-8 border-t border-slate-900 mt-16 text-center text-xs">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p>🇨🇷 Legislative Election dashboards built to evaluate political structures & popular shifts.</p>
+            <p class="text-slate-500 text-[11px] pt-2 border-t border-slate-900/40 max-w-xs mx-auto">Created by Middle-Earth Programmer (Joshua Mishkin)</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Simulator JS Logic -->
+    <script>
+        function calculateSimulatedSeats() {
+            const seats = parseInt(document.getElementById('sim-seats').value) || 0;
+            const partyA = parseInt(document.getElementById('sim-party-a').value) || 0;
+            const partyB = parseInt(document.getElementById('sim-party-b').value) || 0;
+            const partyC = parseInt(document.getElementById('sim-party-c').value) || 0;
+            const partyD = parseInt(document.getElementById('sim-party-d').value) || 0;
+
+            const totalVotes = partyA + partyB + partyC + partyD;
+            if (totalVotes === 0 || seats === 0) return;
+
+            const quotient = totalVotes / seats;
+            const subquotient = quotient / 2;
+
+            const parties = [
+                { name: "Party A", votes: partyA, seats: 0, remainder: 0, qualified: partyA >= subquotient },
+                { name: "Party B", votes: partyB, seats: 0, remainder: 0, qualified: partyB >= subquotient },
+                { name: "Party C", votes: partyC, seats: 0, remainder: 0, qualified: partyC >= subquotient },
+                { name: "Party D", votes: partyD, seats: 0, remainder: 0, qualified: partyD >= subquotient }
+            ];
+
+            // Only qualified parties can participate
+            const qualifiedParties = parties.filter(p => p.qualified);
+
+            // Phase 1: Allocate by whole quotient quotients
+            let distributedSeats = 0;
+            qualifiedParties.forEach(p => {
+                p.seats = Math.floor(p.votes / quotient);
+                p.remainder = p.votes % quotient;
+                distributedSeats += p.seats;
+            });
+
+            // Phase 2: Allocate leftovers by Greatest Remainder
+            let remainingSeats = seats - distributedSeats;
+            if (remainingSeats > 0 && qualifiedParties.length > 0) {
+                // Sort by remainder descending
+                qualifiedParties.sort((a,b) => b.remainder - a.remainder);
+                for(let i=0; i<remainingSeats; i++) {
+                    if (qualifiedParties[i % qualifiedParties.length]) {
+                        qualifiedParties[i % qualifiedParties.length].seats += 1;
+                    }
+                }
+            }
+
+            // Output Presentation HTML
+            const outputBox = document.getElementById('sim-output');
+            outputBox.classList.remove('hidden');
+
+            let partiesResultHTML = '';
+            parties.forEach(p => {
+                const subLabel = p.votes >= subquotient 
+                    ? `<span class="text-green-600 font-semibold">Qualified</span>` 
+                    : `<span class="text-red-500">Failed Threshold</span>`;
+                
+                partiesResultHTML += `
+                    <div class="flex justify-between items-center py-1 border-b border-slate-50">
+                        <span><strong>${p.name}:</strong> ${p.votes.toLocaleString()} votes (${subLabel})</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-bold">${p.seats} seats</span>
+                    </div>
+                `;
+            });
+
+            outputBox.innerHTML = `
+                <div class="font-semibold text-slate-700 border-b pb-1 mb-2">Simulation Metrics:</div>
+                <div class="grid grid-cols-2 gap-1 mb-2 text-[11px] text-slate-500">
+                    <div>Quotient (Cociente): <strong>${Math.round(quotient).toLocaleString()}</strong></div>
+                    <div>Threshold (Subcociente): <strong>${Math.round(subquotient).toLocaleString()}</strong></div>
+                </div>
+                <div class="space-y-1">
+                    ${partiesResultHTML}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
