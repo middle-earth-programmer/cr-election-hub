@@ -34,7 +34,7 @@
                         <rect y="2" width="10" height="2" fill="#DA121A"/>
                     </svg>
                     <!-- Logo links back to the main Homepage -->
-                    <a href="https://middle-earth-programmer.github.io/cr-election-hub/" class="font-bold text-lg text-slate-800 hover:text-blue-600 transition-colors tracking-tight">CR Elections Hub</a>
+                    <a href="https://middle-earth-programmer.github.io/cr-election-hub/" class="font-bold text-lg text-slate-800 hover:text-blue-600 transition-colors tracking-tight">CR Election Hub</a>
                 </div>
                 <div class="flex space-x-4 items-center">
                     <a href="https://middle-earth-programmer.github.io/cr-election-hub/2022-general-election/" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">2022 Results</a>
@@ -166,8 +166,12 @@
                 const natSeats = electionData.national_total.seats;
                 const natVotes = electionData.national_total.popular_vote;
 
-                // Sort national parties by seats won
-                const sortedNationalParties = Object.keys(natSeats).sort((a,b) => natSeats[b] - natSeats[a]);
+                // Sort national parties by seats won, but force "Other" to the end
+                const sortedNationalParties = Object.keys(natSeats).sort((a, b) => {
+                    if (a === 'Other' || a === 'Otros') return 1;
+                    if (b === 'Other' || b === 'Otros') return -1;
+                    return natSeats[b] - natSeats[a];
+                });
 
                 sortedNationalParties.forEach(party => {
                     if (natSeats[party] > 0 || natVotes[party] > 0) {
@@ -248,10 +252,14 @@
                     
                     detailsContainer.innerHTML = ''; // Clear prior elements
 
-                    // Sort display items descending by metric value
+                    // Sort display items descending by metric value, but force "Other" to the end
                     const sortedParties = Object.entries(dataToDisplay)
                         .filter(([_, value]) => value > 0)
-                        .sort((a, b) => b[1] - a[1]);
+                        .sort((a, b) => {
+                            if (a[0] === 'Other' || a[0] === 'Otros') return 1;
+                            if (b[0] === 'Other' || b[0] === 'Otros') return -1;
+                            return b[1] - a[1];
+                        });
 
                     for (const [party, val] of sortedParties) {
                         const style = getStyle(party);
